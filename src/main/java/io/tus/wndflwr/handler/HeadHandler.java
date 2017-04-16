@@ -32,7 +32,7 @@ public class HeadHandler implements TusHandler {
 	@Qualifier("simpleLocker")
 	private Locker locker;
 	@Autowired
-	@Qualifier("simpleStore")
+	@Qualifier("simpleFileRepository")
 	private FileRepository fileRepository;
 
 	@Override

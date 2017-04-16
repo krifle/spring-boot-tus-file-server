@@ -3,11 +3,16 @@ package io.tus.wndflwr.controller;
 import io.tus.wndflwr.config.TusProperties;
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.handler.*;
+import io.tus.wndflwr.model.TusHeader;
 import io.tus.wndflwr.model.TusResponse;
 import io.tus.wndflwr.model.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletResponse;
+
+import static io.tus.wndflwr.constant.HeaderKey.UPLOAD_OFFSET;
 
 @Controller
 @RequestMapping("/files")
@@ -28,8 +33,9 @@ public class FileController {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public String test() {
-		return "tusVersion = " + tusProperties.getVersion();
+	public TusResponse test() {
+		TusHeader testHeader = new TusHeader(UPLOAD_OFFSET, Long.toString(10000L));
+		return new TusResponse(TusHeader.asList(testHeader), HttpServletResponse.SC_NO_CONTENT);
 	}
 
 	@RequestMapping(method = RequestMethod.OPTIONS)

@@ -35,7 +35,7 @@ public class PostHandler implements TusHandler {
 	@Qualifier("simpleLocker")
 	private Locker locker;
 	@Autowired
-	@Qualifier("simpleRepository")
+	@Qualifier("simpleFileRepository")
 	private FileRepository fileRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PostHandler.class);

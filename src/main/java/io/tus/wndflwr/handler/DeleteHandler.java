@@ -13,16 +13,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 
+@Service
 public class DeleteHandler implements TusHandler {
 
 	@Autowired
 	@Qualifier("simpleLocker")
 	private Locker locker;
 	@Autowired
-	@Qualifier("simpleRepository")
+	@Qualifier("simpleFileRepository")
 	private FileRepository fileRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeleteHandler.class);
