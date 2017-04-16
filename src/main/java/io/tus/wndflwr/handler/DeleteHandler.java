@@ -19,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 import static io.tus.wndflwr.constant.HeaderKey.TUS_RESUMABLE;
 
+/**
+ * When receiving a `DELETE` request for an existing upload the Server SHOULD free associated resources and MUST
+ * respond with the `204 No Content` status confirming that the upload was terminated.
+ */
 @Service
 public class DeleteHandler implements TusHandler {
 
