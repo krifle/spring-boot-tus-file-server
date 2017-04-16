@@ -1,10 +1,10 @@
 package io.tus.wndflwr.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 
 public class InvalidContentLengthException extends TusException {
 
 	public InvalidContentLengthException(String contentLength) {
-		super(HttpServletResponse.SC_BAD_REQUEST, "Invalid content length: " + contentLength);
+		super(HttpStatus.BAD_REQUEST, "Invalid content length: " + contentLength);
 	}
 }

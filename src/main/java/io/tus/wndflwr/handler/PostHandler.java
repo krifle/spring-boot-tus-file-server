@@ -14,12 +14,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static io.tus.wndflwr.constant.HeaderKey.LOCATION;
+import static io.tus.wndflwr.constant.HeaderKey.TUS_RESUMABLE;
 
 /**
  * The Client MUST send a POST request against a known upload creation URL to request a new upload resource.
@@ -64,6 +65,7 @@ public class PostHandler implements TusHandler {
 		LOGGER.info("File created with fileId {}", fileInfo.getId());
 
 		TusHeader location = new TusHeader(LOCATION, url);
-		return new TusResponse(TusHeader.asList(location), HttpServletResponse.SC_CREATED);
+		TusHeader resumable = new TusHeader(TUS_RESUMABLE, properties.getResumableVersion());
+		return TusResponse.success(HttpStatus.CREATED, TusHeader.asList(location, resumable));
 	}
 }

@@ -1,10 +1,10 @@
 package io.tus.wndflwr.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 
 public class InternalServerException extends TusException {
 
 	public InternalServerException(String message) {
-		super(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, message);
+		super(HttpStatus.INTERNAL_SERVER_ERROR, message);
 	}
 }

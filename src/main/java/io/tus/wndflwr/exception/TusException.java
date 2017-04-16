@@ -1,27 +1,21 @@
 package io.tus.wndflwr.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class TusException extends Exception {
-	private int status;
-	private String text;
+	private HttpStatus httpStatus;
+	private String message;
 
-	protected TusException(int status, String text) {
-		this.status = status;
-		this.text = text;
+	protected TusException(HttpStatus httpStatus, String message) {
+		this.httpStatus = httpStatus;
+		this.message = message;
 	}
 
-	public int getStatus() {
-		return status;
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
-	}
-
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
+	public String getMessage() {
+		return message;
 	}
 }

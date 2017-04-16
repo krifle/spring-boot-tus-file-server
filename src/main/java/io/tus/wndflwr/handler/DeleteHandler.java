@@ -1,5 +1,6 @@
 package io.tus.wndflwr.handler;
 
+import io.tus.wndflwr.config.TusProperties;
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.file.model.FileInfo;
 import io.tus.wndflwr.file.store.FileRepository;
@@ -13,13 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
+import static io.tus.wndflwr.constant.HeaderKey.TUS_RESUMABLE;
 
 @Service
 public class DeleteHandler implements TusHandler {
 
+	@Autowired
+	private TusProperties properties;
 	@Autowired
 	@Qualifier("simpleLocker")
 	private Locker locker;
@@ -43,6 +47,7 @@ public class DeleteHandler implements TusHandler {
 
 		fileRepository.terminate(fileInfo);
 
-		return new TusResponse(TusHeader.asList(), HttpServletResponse.SC_NO_CONTENT);
+		TusHeader resumable = new TusHeader(TUS_RESUMABLE, properties.getResumableVersion());
+		return TusResponse.success(HttpStatus.NO_CONTENT, TusHeader.asList(resumable));
 	}
 }

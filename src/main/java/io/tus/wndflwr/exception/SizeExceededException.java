@@ -1,9 +1,9 @@
 package io.tus.wndflwr.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 
 public class SizeExceededException extends TusException {
 	public SizeExceededException(String message) {
-		super(HttpServletResponse.SC_REQUEST_ENTITY_TOO_LARGE, message);
+		super(HttpStatus.PAYLOAD_TOO_LARGE, message);
 	}
 }

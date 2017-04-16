@@ -1,10 +1,10 @@
 package io.tus.wndflwr.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 
 public class InvalidOffsetException extends TusException {
 
 	public InvalidOffsetException(String offset) {
-		super(HttpServletResponse.SC_BAD_REQUEST, "Invalid offset: " + offset);
+		super(HttpStatus.BAD_REQUEST, "Invalid offset: " + offset);
 	}
 }

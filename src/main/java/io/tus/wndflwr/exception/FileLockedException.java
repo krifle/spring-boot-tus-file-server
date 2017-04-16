@@ -1,8 +1,10 @@
 package io.tus.wndflwr.exception;
 
+import org.springframework.http.HttpStatus;
+
 public class FileLockedException extends TusException {
 
 	public FileLockedException(String message) {
-		super(423, "File currently locked: " + message);
+		super(HttpStatus.LOCKED, "File currently locked: " + message);
 	}
 }

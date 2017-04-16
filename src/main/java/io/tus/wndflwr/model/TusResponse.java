@@ -1,31 +1,47 @@
 package io.tus.wndflwr.model;
 
+import org.springframework.http.HttpStatus;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class TusResponse {
 
+	private boolean success = true;
 	private List<TusHeader> headers = new ArrayList<>();
-	private int responseCode;
+	private HttpStatus httpStatus = HttpStatus.NO_CONTENT;
+	private String message = "success";
 
-	public TusResponse(List<TusHeader> headers, int responseCode) {
-		this.headers = headers;
-		this.responseCode = responseCode;
+	private TusResponse(boolean success, HttpStatus httpStatus) {
+		this.success = success;
+		this.httpStatus = httpStatus;
+	}
+
+	public boolean isSuccess() {
+		return success;
 	}
 
 	public List<TusHeader> getHeaders() {
 		return headers;
 	}
 
-	public void setHeaders(List<TusHeader> headers) {
-		this.headers = headers;
+	public HttpStatus getHttpStatus() {
+		return httpStatus;
 	}
 
-	public int getResponseCode() {
-		return responseCode;
+	public String getMessage() {
+		return message;
 	}
 
-	public void setResponseCode(int responseCode) {
-		this.responseCode = responseCode;
+	public static TusResponse success(HttpStatus httpStatus, List<TusHeader> headers) {
+		TusResponse response = new TusResponse(true, httpStatus);
+		response.headers = headers;
+		return response;
+	}
+
+	public static TusResponse fail(HttpStatus httpStatus, String message) {
+		TusResponse response = new TusResponse(false, httpStatus);
+		response.message = message;
+		return response;
 	}
 }

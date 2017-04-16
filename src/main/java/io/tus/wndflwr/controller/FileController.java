@@ -6,10 +6,9 @@ import io.tus.wndflwr.model.TusHeader;
 import io.tus.wndflwr.model.TusResponse;
 import io.tus.wndflwr.model.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
 
 import static io.tus.wndflwr.constant.HeaderKey.UPLOAD_OFFSET;
 
@@ -32,7 +31,7 @@ public class FileController {
 	@ResponseBody
 	public TusResponse test() {
 		TusHeader testHeader = new TusHeader(UPLOAD_OFFSET, Long.toString(10000L));
-		return new TusResponse(TusHeader.asList(testHeader), HttpServletResponse.SC_OK);
+		return TusResponse.success(HttpStatus.I_AM_A_TEAPOT, TusHeader.asList(testHeader));
 	}
 
 	@RequestMapping(method = RequestMethod.OPTIONS)
@@ -74,7 +73,7 @@ public class FileController {
 	}
 
 	@ExceptionHandler(TusException.class)
-	public String tusExceptionHandler() { // TODO
-		return "";
+	public TusResponse tusExceptionHandler(TusException tusException) {
+		return TusResponse.fail(tusException.getHttpStatus(), tusException.getMessage());
 	}
 }

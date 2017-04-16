@@ -8,9 +8,8 @@ import io.tus.wndflwr.model.request.TusRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * An `OPTIONS` request MAY be used to gather information about the Server's current configuration. A successful
@@ -30,6 +29,6 @@ public class OptionsHandler implements TusHandler {
 		TusHeader extension = new TusHeader(HeaderKey.TUS_EXTENSION, tusProperties.getExtensions());
 		TusHeader maxSize = new TusHeader(HeaderKey.TUS_MAX_SIZE, String.valueOf(tusProperties.getMaxSize()));
 
-		return new TusResponse(TusHeader.asList(extension, maxSize), HttpServletResponse.SC_OK);
+		return TusResponse.success(HttpStatus.OK, TusHeader.asList(extension, maxSize));
 	}
 }

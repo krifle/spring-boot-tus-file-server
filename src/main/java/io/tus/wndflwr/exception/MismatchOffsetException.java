@@ -1,10 +1,10 @@
 package io.tus.wndflwr.exception;
 
-import javax.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 
 public class MismatchOffsetException extends TusException {
 
 	public MismatchOffsetException(String message) {
-		super(HttpServletResponse.SC_CONFLICT, message);
+		super(HttpStatus.CONFLICT, message);
 	}
 }
