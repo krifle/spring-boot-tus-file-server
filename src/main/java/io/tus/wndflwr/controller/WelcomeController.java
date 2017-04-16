@@ -15,4 +15,9 @@ public class WelcomeController {
 		model.put("message", "yo");
 		return "welcome";
 	}
+
+	@GetMapping("/login")
+	public String login() {
+		return "login";
+	}
 }
