@@ -17,10 +17,6 @@ public class HeadRequest implements TusRequest {
 		return fileId;
 	}
 
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
-	}
-
 	public String getValidFileId() throws NotFoundException {
 		if (StringUtils.isEmpty(fileId)) {
 			throw new NotFoundException("Empty fileId input");

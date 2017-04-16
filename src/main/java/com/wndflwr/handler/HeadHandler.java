@@ -39,19 +39,22 @@ public class HeadHandler implements TusHandler {
 	@Override
 	public TusResponse handle(TusRequest request) throws TusException {
 		HeadRequest headRequest = (HeadRequest) request;
-		String fileId = headRequest.getFileId();
 
-		try (Lock lock = locker.getLock(fileId)) {
-			FileInfo fileInfo = repository.getFileInfo(fileId);
-
-			List<TusHeader> headerList = Lists.newArrayList();
-			if (fileInfo.hasValidMetadata()) {
-				headerList.add(new TusHeader(UPLOAD_METADATA, fileInfo.getMetadata()));
-			}
-			headerList.add(new TusHeader(CACHE_CONTROL, "no-repository"));
-			headerList.add(new TusHeader(UPLOAD_LENGTH, Long.toString(fileInfo.getEntityLength())));
-			headerList.add(new TusHeader(UPLOAD_OFFSET, Long.toString(fileInfo.getOffset())));
-			return new TusResponse(headerList, HttpServletResponse.SC_NO_CONTENT);
+		try (Lock lock = locker.getLock(headRequest.getFileId())) {
+			return whileLocked(headRequest);
 		}
+	}
+
+	private TusResponse whileLocked(HeadRequest request) throws TusException {
+		FileInfo fileInfo = repository.getFileInfo(request.getFileId());
+
+		List<TusHeader> headerList = Lists.newArrayList();
+		if (fileInfo.hasValidMetadata()) {
+			headerList.add(new TusHeader(UPLOAD_METADATA, fileInfo.getMetadata()));
+		}
+		headerList.add(new TusHeader(CACHE_CONTROL, "no-repository"));
+		headerList.add(new TusHeader(UPLOAD_LENGTH, Long.toString(fileInfo.getEntityLength())));
+		headerList.add(new TusHeader(UPLOAD_OFFSET, Long.toString(fileInfo.getOffset())));
+		return new TusResponse(headerList, HttpServletResponse.SC_NO_CONTENT);
 	}
 }

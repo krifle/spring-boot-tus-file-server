@@ -10,4 +10,5 @@ public class HeaderKey {
 	public static final String UPLOAD_METADATA = "Upload-Metadata";
 	public static final String CACHE_CONTROL = "Cache-Control";
 	public static final String UPLOAD_LENGTH = "Upload-Length";
+	public static final String LOCATION = "Location";
 }

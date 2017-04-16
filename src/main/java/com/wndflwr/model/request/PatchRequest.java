@@ -24,7 +24,7 @@ public class PatchRequest implements TusRequest {
 		this.fileId = fileId;
 		this.contentType = contentType;
 		this.uploadOffset = uploadOffset;
-		this.contentType = contentLength;
+		this.contentLength = contentLength;
 
 		LOGGER.debug(ToStringBuilder.reflectionToString(this, ToStringStyle.SIMPLE_STYLE));
 	}
@@ -33,24 +33,8 @@ public class PatchRequest implements TusRequest {
 		return fileId;
 	}
 
-	public void setFileId(String fileId) {
-		this.fileId = fileId;
-	}
-
-	public String getContentType() {
-		return contentType;
-	}
-
-	public void setContentType(String contentType) {
-		this.contentType = contentType;
-	}
-
 	public Long getUploadOffset() {
 		return Long.parseLong(uploadOffset);
-	}
-
-	public void setUploadOffset(String uploadOffset) {
-		this.uploadOffset = uploadOffset;
 	}
 
 	public Long getContentLength() {
@@ -58,10 +42,6 @@ public class PatchRequest implements TusRequest {
 			return null;
 		}
 		return Long.parseLong(contentLength);
-	}
-
-	public void setContentLength(String contentLength) {
-		this.contentLength = contentLength;
 	}
 
 	public boolean contentLengthNotReadable() {

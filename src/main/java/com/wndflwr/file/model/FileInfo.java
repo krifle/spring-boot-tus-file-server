@@ -25,6 +25,8 @@ public class FileInfo {
 	private Map<String, String> metadataMap;
 
 	public FileInfo(long entityLength, String metadata, String username) {
+		// TODO Currently fileId is randomly generated string.
+		// TODO However, this should be replaced with the file path excluding base file directory name
 		this.id = UUID.randomUUID().toString().replace("-", "_");
 		this.entityLength = entityLength;
 		this.metadata = metadata;

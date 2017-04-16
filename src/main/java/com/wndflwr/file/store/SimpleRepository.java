@@ -7,6 +7,7 @@ import com.wndflwr.exception.NotFoundException;
 import com.wndflwr.exception.TusException;
 import com.wndflwr.file.model.FileInfo;
 import com.wndflwr.model.request.PatchRequest;
+import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,24 @@ public class SimpleRepository implements Repository {
 	}
 
 	@Override
+	public void create(FileInfo fileInfo) throws TusException {
+		File infoFile = new File(getInfoFilePath(fileInfo.getId())); // TODO file authentication, race condition, lock etc...
+		writeFileInfoToFile(fileInfo, infoFile);
+
+		String binFilePath = getBinFilePath(fileInfo.getId());
+
+		File binFile = new File(binFilePath);
+		try {
+			if (!binFile.createNewFile()) {
+				LOGGER.error("File creation failed: ", fileInfo.getId());
+				throw new RuntimeException(); // TODO
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	@Override
 	public FileInfo getFileInfo(String fileId) throws TusException {
 		File infoFile = new File(getInfoFilePath(fileId));
 		File binFile = new File(getBinFilePath(fileId));
@@ -45,7 +64,7 @@ public class SimpleRepository implements Repository {
 		if (!infoFile.exists() || !binFile.exists()) {
 			throw new NotFoundException(fileId);
 		}
-		FileInfo fileInfo = readFileToValue(infoFile);
+		FileInfo fileInfo = readFileInfoFromFile(infoFile);
 		fileInfo.setOffset(binFile.length());
 		return fileInfo;
 	}
@@ -68,7 +87,13 @@ public class SimpleRepository implements Repository {
 
 	@Override
 	public void finish(String fileId) throws TusException {
-		// TODO delete temporary file? mv file? .bin to .mp4? etc.
+		// TODO delete temporary file? mv file?  change file extension .bin to .mp4? etc.
+	}
+
+	@Override
+	public boolean terminate(FileInfo fileInfo) throws TusException {
+		return new File(getInfoFilePath(fileInfo.getId())).delete() &&
+				new File(getBinFilePath(fileInfo.getId())).delete();
 	}
 
 	private String getInfoFilePath(String fileId) {
@@ -79,11 +104,20 @@ public class SimpleRepository implements Repository {
 		return properties.getBinFilePath() + File.separator + fileId + ".bin";
 	}
 
-	private FileInfo readFileToValue(File infoFile) throws NotFoundException {
+	private FileInfo readFileInfoFromFile(File infoFile) throws NotFoundException {
 		try {
 			return new ObjectMapper().readValue(infoFile, FileInfo.class);
 		} catch (IOException e) {
 			throw new NotFoundException("Cannot read File [" + infoFile.getName() + "] into FileInfo.class");
+		}
+	}
+
+	private void writeFileInfoToFile(FileInfo fileInfo, File infoFile) {
+		try {
+			new ObjectMapper().writeValue(infoFile, fileInfo);
+		} catch (IOException e) {
+			LOGGER.error("IOException: ", e);
+			throw new InternalException("Cannot write file[" + infoFile.getName() + "]");
 		}
 	}
 

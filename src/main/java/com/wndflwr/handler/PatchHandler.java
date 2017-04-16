@@ -41,11 +41,11 @@ public class PatchHandler implements TusHandler {
 		PatchRequest patchRequest = (PatchRequest) request;
 
 		try (Lock lock = locker.getLock(patchRequest.getFileId())) {
-			return whileLock(patchRequest);
+			return whileLocked(patchRequest);
 		}
 	}
 
-	private TusResponse whileLock(PatchRequest request) throws TusException {
+	private TusResponse whileLocked(PatchRequest request) throws TusException {
 		request.validate();
 
 		FileInfo fileInfo = repository.getFileInfo(request.getValidFileId());
