@@ -1,6 +1,5 @@
 package io.tus.wndflwr.controller;
 
-import io.tus.wndflwr.config.TusProperties;
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.handler.*;
 import io.tus.wndflwr.model.TusHeader;
@@ -19,8 +18,6 @@ import static io.tus.wndflwr.constant.HeaderKey.UPLOAD_OFFSET;
 public class FileController {
 
 	@Autowired
-	private TusProperties tusProperties;
-	@Autowired
 	private OptionsHandler optionsHandler;
 	@Autowired
 	private PostHandler postHandler;
@@ -35,7 +32,7 @@ public class FileController {
 	@ResponseBody
 	public TusResponse test() {
 		TusHeader testHeader = new TusHeader(UPLOAD_OFFSET, Long.toString(10000L));
-		return new TusResponse(TusHeader.asList(testHeader), HttpServletResponse.SC_NO_CONTENT);
+		return new TusResponse(TusHeader.asList(testHeader), HttpServletResponse.SC_OK);
 	}
 
 	@RequestMapping(method = RequestMethod.OPTIONS)
