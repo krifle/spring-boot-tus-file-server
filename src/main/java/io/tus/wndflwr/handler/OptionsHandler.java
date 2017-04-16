@@ -2,6 +2,7 @@ package io.tus.wndflwr.handler;
 
 import io.tus.wndflwr.config.TusProperties;
 import io.tus.wndflwr.constant.HeaderKey;
+import io.tus.wndflwr.exception.FileLockedException;
 import io.tus.wndflwr.model.TusHeader;
 import io.tus.wndflwr.model.TusResponse;
 import io.tus.wndflwr.model.request.TusRequest;
@@ -25,7 +26,7 @@ public class OptionsHandler implements TusHandler {
 	private TusProperties tusProperties;
 
 	@Override
-	public TusResponse handle(TusRequest request) {
+	public TusResponse handle(TusRequest request) throws FileLockedException {
 		TusHeader extension = new TusHeader(HeaderKey.TUS_EXTENSION, tusProperties.getExtensions());
 		TusHeader maxSize = new TusHeader(HeaderKey.TUS_MAX_SIZE, String.valueOf(tusProperties.getMaxSize()));
 

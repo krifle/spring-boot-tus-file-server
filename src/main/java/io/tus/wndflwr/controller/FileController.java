@@ -2,15 +2,11 @@ package io.tus.wndflwr.controller;
 
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.handler.*;
-import io.tus.wndflwr.model.TusHeader;
 import io.tus.wndflwr.model.TusResponse;
 import io.tus.wndflwr.model.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import static io.tus.wndflwr.constant.HeaderKey.UPLOAD_OFFSET;
 
 @Controller
 @RequestMapping("/files")
@@ -27,16 +23,9 @@ public class FileController {
 	@Autowired
 	private DeleteHandler deleteHandler;
 
-	@RequestMapping(method = RequestMethod.GET)
-	@ResponseBody
-	public TusResponse test() {
-		TusHeader testHeader = new TusHeader(UPLOAD_OFFSET, Long.toString(10000L));
-		return TusResponse.success(HttpStatus.I_AM_A_TEAPOT, TusHeader.asList(testHeader));
-	}
-
 	@RequestMapping(method = RequestMethod.OPTIONS)
 	@ResponseBody
-	public TusResponse option() {
+	public TusResponse option() throws TusException {
 		return optionsHandler.handle(new OptionsRequest());
 	}
 
@@ -73,6 +62,7 @@ public class FileController {
 	}
 
 	@ExceptionHandler(TusException.class)
+	@ResponseBody
 	public TusResponse tusExceptionHandler(TusException tusException) {
 		return TusResponse.fail(tusException.getHttpStatus(), tusException.getMessage());
 	}
