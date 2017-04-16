@@ -88,8 +88,16 @@ public class FileInfo {
 		this.metadataMap = metadataMap;
 	}
 
+	public boolean alreadyHasEntireFile() {
+		return offset == entityLength;
+	}
+
 	public boolean hasValidMetadata() {
 		return !CollectionUtils.isEmpty(metadataMap);
+	}
+
+	public boolean transferCompleted(long transferred) {
+		return transferred == entityLength;
 	}
 
 	private Map<String, String> decodeMetadata(String metadata) {

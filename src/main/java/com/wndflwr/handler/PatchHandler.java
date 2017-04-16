@@ -1,34 +1,79 @@
 package com.wndflwr.handler;
 
-import com.wndflwr.exception.InvalidContentType;
-import com.wndflwr.exception.InvalidOffset;
 import com.wndflwr.exception.TusException;
+import com.wndflwr.file.model.FileInfo;
+import com.wndflwr.file.store.Repository;
+import com.wndflwr.locker.Lock;
+import com.wndflwr.locker.Locker;
+import com.wndflwr.model.TusHeader;
 import com.wndflwr.model.TusResponse;
-import org.springframework.util.StringUtils;
+import com.wndflwr.model.request.PatchRequest;
+import com.wndflwr.model.request.TusRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+
+import static com.wndflwr.constant.HeaderKey.UPLOAD_OFFSET;
+
+/**
+ * The Server SHOULD accept `PATCH` requests against any upload URL and apply the bytes contained in the message at
+ * the given offset specified by the `Upload-Offset` header.
+ * All `PATCH` requests MUST use `Content-Type: application/offset+octet-stream`.
+ */
+@Service
 public class PatchHandler implements TusHandler {
 
-	/**
-	 * The Server SHOULD accept `PATCH` requests against any upload URL and apply the bytes contained in the message at
-	 * the given offset specified by the `Upload-Offset` header.
-	 * All `PATCH` requests MUST use `Content-Type: application/offset+octet-stream`.
-	 */
+	@Autowired
+	@Qualifier("simpleLocker")
+	private Locker locker;
+	@Autowired
+	@Qualifier("simpleRepository")
+	private Repository repository;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(PatchHandler.class);
+
 	@Override
-	public TusResponse handle(Object... arguments) throws TusException {
-		String fileId = (String) arguments[0]; // FIXME must be improved
-		String contentType = (String) arguments[1];
-		String uploadOffset = (String) arguments[2];
+	public TusResponse handle(TusRequest request) throws TusException {
+		PatchRequest patchRequest = (PatchRequest) request;
 
-		if (StringUtils.isEmpty(contentType) || !contentType.equals("application/offset+octet-stream")) {
-			throw new InvalidContentType("Invalid content type [" + contentType + "]");
+		try (Lock lock = locker.getLock(patchRequest.getFileId())) {
+			return whileLock(patchRequest);
+		}
+	}
+
+	private TusResponse whileLock(PatchRequest request) throws TusException {
+		request.validate();
+
+		FileInfo fileInfo = repository.getFileInfo(request.getValidFileId());
+
+		if (fileInfo.alreadyHasEntireFile()) {
+			return getResponse(fileInfo);
 		}
 
-		if (StringUtils.isEmpty(uploadOffset) || Long.parseLong(uploadOffset) < 0) {
-			throw new InvalidOffset(uploadOffset);
+		request.validateOnFileInfo(fileInfo);
+
+		long transferred = repository.write(request, calculateMaxBuffer(request, fileInfo));
+		if (fileInfo.transferCompleted(transferred)) {
+			LOGGER.info("Upload " + request.getFileId() + " is completed.");
+			repository.finish(request.getFileId());
 		}
+		return getResponse(fileInfo);
+	}
 
+	private long calculateMaxBuffer(PatchRequest request, FileInfo fileInfo) {
+		if (request.contentLengthNotReadable()) {
+			return fileInfo.getEntityLength() - request.getUploadOffset();
+		} else {
+			return request.getContentLength();
+		}
+	}
 
-
-		return null;
+	private TusResponse getResponse(FileInfo fileInfo) {
+		TusHeader uploadOffset = new TusHeader(UPLOAD_OFFSET, Long.toString(fileInfo.getOffset()));
+		return new TusResponse(TusHeader.asList(uploadOffset), HttpServletResponse.SC_NO_CONTENT);
 	}
 }

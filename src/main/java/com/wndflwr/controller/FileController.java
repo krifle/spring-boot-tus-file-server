@@ -6,6 +6,10 @@ import com.wndflwr.handler.HeadHandler;
 import com.wndflwr.handler.OptionsHandler;
 import com.wndflwr.handler.PatchHandler;
 import com.wndflwr.model.TusResponse;
+import com.wndflwr.model.request.HeadRequest;
+import com.wndflwr.model.request.OptionsRequest;
+import com.wndflwr.model.request.PatchRequest;
+import com.wndflwr.model.request.TusRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,21 +36,24 @@ public class FileController {
 	@RequestMapping(method = RequestMethod.OPTIONS)
 	@ResponseBody
 	public TusResponse option() {
-		return optionsHandler.handle();
+		return optionsHandler.handle(new OptionsRequest());
 	}
 
 	@RequestMapping(method = RequestMethod.HEAD, value = "/{fileId}")
 	@ResponseBody
 	public TusResponse head(@RequestParam String fileId) throws TusException {
-		return headHandler.handle(fileId);
+		TusRequest request = new HeadRequest(fileId);
+		return headHandler.handle(request);
 	}
 
 	@RequestMapping(method = RequestMethod.PATCH, value = "/{fileId}")
 	@ResponseBody
 	public TusResponse patch(@RequestParam String fileId,
 							 @RequestHeader("Content-Type") String contentType,
-							 @RequestHeader("upload-offset") String uploadOffset) throws TusException {
-		return patchHandler.handle(fileId, contentType, uploadOffset);
+							 @RequestHeader("upload-offset") String uploadOffset,
+							 @RequestHeader("content-length") String contentLength) throws TusException {
+		TusRequest request = new PatchRequest(fileId, contentType, uploadOffset, contentLength);
+		return patchHandler.handle(request);
 	}
 
 	@ExceptionHandler(TusException.class)

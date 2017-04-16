@@ -3,13 +3,13 @@ package com.wndflwr.handler;
 import com.wndflwr.config.TusProperties;
 import com.wndflwr.model.TusHeader;
 import com.wndflwr.model.TusResponse;
+import com.wndflwr.model.request.TusRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.constraints.Null;
 
 import static com.wndflwr.constant.HeaderKey.TUS_EXTENSION;
 import static com.wndflwr.constant.HeaderKey.TUS_MAX_SIZE;
@@ -28,7 +28,7 @@ public class OptionsHandler implements TusHandler {
 	private TusProperties tusProperties;
 
 	@Override
-	public TusResponse handle(@Null Object... arguments) {
+	public TusResponse handle(TusRequest request) {
 		TusHeader extension = new TusHeader(TUS_EXTENSION, tusProperties.getExtensions());
 		TusHeader maxSize = new TusHeader(TUS_MAX_SIZE, String.valueOf(tusProperties.getMaxSize()));
 

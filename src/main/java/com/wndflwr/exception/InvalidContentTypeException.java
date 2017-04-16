@@ -2,9 +2,9 @@ package com.wndflwr.exception;
 
 import javax.servlet.http.HttpServletResponse;
 
-public class InvalidContentType extends TusException {
+public class InvalidContentTypeException extends TusException {
 
-	public InvalidContentType(String message) {
+	public InvalidContentTypeException(String message) {
 		super(HttpServletResponse.SC_BAD_GATEWAY, message);
 	}
 }
