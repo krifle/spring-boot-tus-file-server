@@ -10,12 +10,13 @@ import java.util.regex.Matcher;
 @ConfigurationProperties(prefix = "tus")
 public class TusProperties {
 
-	private String version;
-	private String resumableVersion;
-	private String binFilePath;
-	private String infoFilePath;
-	private String extensions;
-	private long maxSize;
+	private String version = "1.0.0";
+	private String resumableVersion = "1.0.0";
+	private String binFilePath = "./tmp/";
+	private String infoFilePath = "./tmp/";
+	private String extensions = "creation,termination";
+	private long maxSize = 0L;
+	private String loggingDir = "./tmp/log";
 
 	public String getVersion() {
 		return version;
@@ -63,5 +64,13 @@ public class TusProperties {
 
 	public void setMaxSize(long maxSize) {
 		this.maxSize = maxSize;
+	}
+
+	public String getLoggingDir() {
+		return loggingDir;
+	}
+
+	public void setLoggingDir(String loggingDir) {
+		this.loggingDir = loggingDir;
 	}
 }
