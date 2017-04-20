@@ -15,6 +15,7 @@ import java.util.UUID;
 public class FileInfo {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(FileInfo.class);
+	private static final int KEY_VALUE_PAIR_SIZE = 2;
 
 	private String id;
 	private long entityLength = -1L;
@@ -106,8 +107,9 @@ public class FileInfo {
 		Map<String, String> metadataMap = new HashMap<>();
 		Splitter.on(",").trimResults().omitEmptyStrings().split(metadata).forEach(data -> {
 			List<String> pair = Lists.newArrayList(Splitter.on(" ").trimResults().omitEmptyStrings().split(data));
-			if (pair.size() != 2) { // TODO magic number
-				throw new RuntimeException(""); // TODO
+			if (pair.size() != KEY_VALUE_PAIR_SIZE) {
+				LOGGER.info("Invalid metadata form [{}]", metadata);
+				return;
 			}
 			String key = pair.get(0);
 			String value = new String(BaseEncoding.base64().decode(pair.get(1)));
