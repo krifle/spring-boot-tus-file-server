@@ -1,3 +1,6 @@
+# Waring
+This project is currently building up, thus has not been tested. Do not use this project for production purpose.
+
 # Spring Boot Tus File Server
 [Spring Boot](https://projects.spring.io/spring-boot/) and [Tus.io](http://tus.io) based file server.  
 Why not build a file server that just works like FileZilla, but can be used by a web browser?  
@@ -15,6 +18,12 @@ This project aims to implement the following requirements:
     - Download files
     - Delete files
 - Spring security based authentication
+    - Remember me
+    - Change password
+    - Find password
+- User management system(UMS)
+    - Insert new user
+    - User with authorities(user, administrator, etc.)
 - Ip based ACL
 - File transferring queue
 - SSL transfer if possible
