@@ -3,7 +3,7 @@ package io.tus.wndflwr.handler;
 import io.tus.wndflwr.config.TusProperties;
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.file.model.FileInfo;
-import io.tus.wndflwr.file.store.FileRepository;
+import io.tus.wndflwr.file.repository.FileRepository;
 import io.tus.wndflwr.locker.Lock;
 import io.tus.wndflwr.locker.Locker;
 import io.tus.wndflwr.model.TusHeader;

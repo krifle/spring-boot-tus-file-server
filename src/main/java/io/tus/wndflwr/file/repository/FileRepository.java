@@ -1,4 +1,4 @@
-package io.tus.wndflwr.file.store;
+package io.tus.wndflwr.file.repository;
 
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.file.model.FileInfo;

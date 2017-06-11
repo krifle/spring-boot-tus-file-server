@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="io.tus.wndflwr.repository.UserMapper">
+
+	<insert id="createTableUser">
+		CREATE TABLE IF NOT EXISTS tus_user (
+			username VARCHAR(255) PRIMARY KEY
+			, password VARCHAR(255)
+			, email VARCHAR(255)
+			, reg_date TIMESTAMP
+			, mod_date TIMESTAMP
+			, last_login TIMESTAMP
+			, account_non_expired BOOLEAN
+			, account_non_locked BOOLEAN
+			, credentials_non_expired BOOLEAN
+			, enabled BOOLEAN
+		);
+		CREATE INDEX IF NOT EXISTS idx_user_email ON tus_user (email);
+	</insert>
+
+	<insert id="createTableUserAuthority">
+		CREATE TABLE IF NOT EXISTS tus_user_authority (
+			username VARCHAR(255)
+			, authority VARCHAR(255)
+		);
+		CREATE INDEX IF NOT EXISTS idx_user_authority_username ON tus_user_authority (username);
+		CREATE INDEX IF NOT EXISTS idx_user_authority_authority ON tus_user_authority (authority);
+	</insert>
+
+	<insert id="createTableUserIp">
+		CREATE TABLE IF NOT EXISTS tus_user_ip (
+			username VARCHAR(255)
+			, type VARCHAR(4)
+			, ip VARCHAR(100)
+		);
+		CREATE INDEX IF NOT EXISTS idx_user_ip_username ON tus_user_ip (username);
+		CREATE INDEX IF NOT EXISTS idx_user_ip_type ON tus_user_ip (type);
+		CREATE INDEX IF NOT EXISTS idx_user_ip_ip ON tus_user_ip (ip);
+	</insert>
+
+	<select id="selectUserByUsername" resultType="User">
+		SELECT
+			username
+			, password
+			, email
+			, mod_date modDate
+			, reg_date regDate
+			, last_login lastLogin
+			, account_non_expired accountNonExpired
+			, account_non_locked accountNonLocked
+			, credentials_non_expired credentialsNonExpired
+			, enabled
+		FROM
+			tus_user
+		WHERE
+			username = #{username}
+	</select>
+
+	<insert id="insertUser" parameterType="User">
+		INSERT INTO tus_user (
+			username
+			, password
+			, email
+			, mod_date
+			, reg_date
+			, last_login
+			, account_non_expired
+			, account_non_locked
+			, credentials_non_expired
+			, enabled
+		) VALUES (
+			#{username}
+			, #{password}
+			, #{email}
+			, SYSDATE
+			, SYSDATE
+			, SYSDATE
+			, true
+			, true
+			, true
+			, true
+		)
+	</insert>
+
+	<select id="selectUserAuthorityByUserName" resultType="Authority">
+		SELECT
+			username
+			, authority
+		FROM
+			tus_user_authority
+		WHERE
+			username = #{username}
+	</select>
+
+	<insert id="insertUserAuthority" parameterType="Authority">
+		INSERT INTO tus_user_authority (
+			username
+			, authority
+		) VALUES (
+			#{username}
+			, #{authority}
+		)
+	</insert>
+
+	<select id="selectUserIpByUserName" resultType="Ip">
+		SELECT
+			username
+			, ip
+			, type
+		FROM
+			tus_user_ip
+		WHERE
+			username = #{username}
+	</select>
+
+	<insert id="insertUserIp" parameterType="Ip">
+		INSERT INTO tus_user_ip (
+			username
+			, ip
+			, type
+		) VALUES (
+			#{username}
+			, #{ip}
+			, #{type}
+		)
+	</insert>
+
+</mapper>
