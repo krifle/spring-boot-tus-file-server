@@ -1,4 +1,4 @@
-package io.tus.wndflwr.file.store;
+package io.tus.wndflwr.file.repository;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.tus.wndflwr.config.TusProperties;
