@@ -8,6 +8,7 @@ import io.tus.wndflwr.repository.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 
@@ -37,10 +38,10 @@ public class DbInitializer {
 		if (userMapper.selectUserByUsername(DEFAULT_USERNAME) == null) {
 			userMapper.insertUser(defaultUser());
 		}
-		if (userMapper.selectUserAuthorityByUserName(DEFAULT_USERNAME) == null) {
+		if (CollectionUtils.isEmpty(userMapper.selectUserAuthorityByUserName(DEFAULT_USERNAME))) {
 			userMapper.insertUserAuthority(defaultAuthority());
 		}
-		if (userMapper.selectUserIpByUserName(DEFAULT_USERNAME) == null) {
+		if (CollectionUtils.isEmpty(userMapper.selectUserIpByUserName(DEFAULT_USERNAME))) {
 			userMapper.insertUserIp(defaultIp());
 		}
 	}

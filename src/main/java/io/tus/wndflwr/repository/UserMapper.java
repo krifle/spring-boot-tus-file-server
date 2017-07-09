@@ -1,5 +1,6 @@
 package io.tus.wndflwr.repository;
 
+import io.tus.wndflwr.controller.request.model.UserSearch;
 import io.tus.wndflwr.repository.model.Authority;
 import io.tus.wndflwr.repository.model.Ip;
 import io.tus.wndflwr.repository.model.User;
@@ -13,6 +14,8 @@ public interface UserMapper {
 	void createTableUser();
 
 	User selectUserByUsername(String username);
+
+	List<User> selectUsers(UserSearch userSearch);
 
 	void insertUser(User user);
 

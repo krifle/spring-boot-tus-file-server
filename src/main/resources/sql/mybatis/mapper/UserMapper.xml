@@ -56,6 +56,52 @@
 			username = #{username}
 	</select>
 
+	<select id="selectUsers" resultType="User" parameterType="UserSearch">
+		SELECT
+			user.username
+			, user.email
+			, user.mod_date modDate
+			, user.reg_date regDate
+			, user.last_login lastLogin
+			, user.account_non_expired accountNonExpired
+			, user.account_non_locked accountNonLocked
+			, user.credentials_non_expired credentialsNonExpired
+			, user.enabled
+		FROM
+			tus_user user
+			, tus_user_ip ip
+			, tus_user_authority authority
+		WHERE
+			user.username = ip.username
+			AND user.username = authority.username
+			<if test="username != null">
+				AND user.username = #{username}
+			</if>
+			<if test="email != null">
+				AND user.email = #{email}
+			</if>
+			<if test="ip != null">
+				AND ip.ip = #{ip}
+			</if>
+			<if test="authority != null">
+				AND authority.authority = #{authority}
+			</if>
+			AND user.account_non_expired = #{accountNonExpired}
+			AND user.account_non_locked = #{accountNonLocked}
+			AND user.credentials_non_expired = #{credentialsNonExpired}
+			AND user.enabled = #{enabled}
+		GROUP BY
+			user.username
+			, user.email
+			, user.mod_date
+			, user.reg_date
+			, user.last_login
+			, user.account_non_expired
+			, user.account_non_locked
+			, user.credentials_non_expired
+			, user.enabled
+	</select>
+
 	<insert id="insertUser" parameterType="User">
 		INSERT INTO tus_user (
 			username
@@ -81,6 +127,20 @@
 			, true
 		)
 	</insert>
+
+	<update id="updateUser" parameterType="User">
+		UPDATE tus_user
+		SET
+			<if test="password != null">
+				password = #{password}
+			</if>
+			<if test="email != null">
+				, email = #{email}
+			</if>
+			,
+		WHERE
+			username = #{username}
+	</update>
 
 	<select id="selectUserAuthorityByUserName" resultType="Authority">
 		SELECT
