@@ -3,6 +3,7 @@
 <configuration>
 	<typeAliases>
 		<package name="io.tus.wndflwr.repository.model"/>
+		<package name="io.tus.wndflwr.controller.request.model"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="sql/mybatis/mapper/UserMapper.xml"/>

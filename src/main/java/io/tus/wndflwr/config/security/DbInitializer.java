@@ -8,6 +8,7 @@ import io.tus.wndflwr.repository.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 
@@ -18,6 +19,7 @@ public class DbInitializer {
 	private static final String DEFAULT_PASSWORD = "admin";
 	private static final String DEFAULT_USER_EMAIL = "admin@admin.com";
 	private static final String DEFAULT_USER_AUTHORITY = "admin";
+	private static final String DEFAULT_IP = "127.0.0.1";
 
 	@Autowired
 	private UserMapper userMapper;
@@ -37,10 +39,10 @@ public class DbInitializer {
 		if (userMapper.selectUserByUsername(DEFAULT_USERNAME) == null) {
 			userMapper.insertUser(defaultUser());
 		}
-		if (userMapper.selectUserAuthorityByUserName(DEFAULT_USERNAME) == null) {
+		if (CollectionUtils.isEmpty(userMapper.selectUserAuthorityByUserName(DEFAULT_USERNAME))) {
 			userMapper.insertUserAuthority(defaultAuthority());
 		}
-		if (userMapper.selectUserIpByUserName(DEFAULT_USERNAME) == null) {
+		if (CollectionUtils.isEmpty(userMapper.selectUserIpByUserName(DEFAULT_USERNAME))) {
 			userMapper.insertUserIp(defaultIp());
 		}
 	}
@@ -63,7 +65,7 @@ public class DbInitializer {
 	private Ip defaultIp() {
 		Ip ip = new Ip();
 		ip.setUsername(DEFAULT_USERNAME);
-		ip.setIp("127.0.0.1");
+		ip.setIp(DEFAULT_IP);
 		ip.setType(IpType.IPV4);
 		return ip;
 	}
