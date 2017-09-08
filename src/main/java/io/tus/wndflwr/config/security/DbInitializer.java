@@ -19,6 +19,7 @@ public class DbInitializer {
 	private static final String DEFAULT_PASSWORD = "admin";
 	private static final String DEFAULT_USER_EMAIL = "admin@admin.com";
 	private static final String DEFAULT_USER_AUTHORITY = "admin";
+	private static final String DEFAULT_IP = "127.0.0.1";
 
 	@Autowired
 	private UserMapper userMapper;
@@ -64,7 +65,7 @@ public class DbInitializer {
 	private Ip defaultIp() {
 		Ip ip = new Ip();
 		ip.setUsername(DEFAULT_USERNAME);
-		ip.setIp("127.0.0.1");
+		ip.setIp(DEFAULT_IP);
 		ip.setType(IpType.IPV4);
 		return ip;
 	}
