@@ -33,9 +33,9 @@ public class DbInitializer {
 			userMapper.insertUser(User.ofDefault(passwordEncoder));
 		}
 		if (CollectionUtils.isEmpty(userMapper.selectUserAuthorityByUserName(User.DEFAULT_USERNAME))) {
-			userMapper.insertUserAuthority(Authority.ofDefault());
+			Authority.ofDefaults().forEach(authority -> userMapper.insertUserAuthority(authority));
 		}
-		if (CollectionUtils.isEmpty(userMapper.selectUserIpByUserName(User.DEFAULT_USERNAME))) {
+		if (CollectionUtils.isEmpty(userMapper.selectUserIpByUsername(User.DEFAULT_USERNAME))) {
 			userMapper.insertUserIp(Ip.ofDefault());
 		}
 	}

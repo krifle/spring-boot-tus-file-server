@@ -6,10 +6,10 @@ public class UserSearch {
 	private String email;
 	private String ip;
 	private String authority;
-	private boolean accountNonExpired;
-	private boolean accountNonLocked;
-	private boolean credentialsNonExpired;
-	private boolean enabled;
+	private Boolean accountNonExpired;
+	private Boolean accountNonLocked;
+	private Boolean credentialsNonExpired;
+	private Boolean enabled;
 
 	public String getUsername() {
 		return username;
@@ -43,35 +43,35 @@ public class UserSearch {
 		this.authority = authority;
 	}
 
-	public boolean isAccountNonExpired() {
+	public Boolean getAccountNonExpired() {
 		return accountNonExpired;
 	}
 
-	public void setAccountNonExpired(boolean accountNonExpired) {
+	public void setAccountNonExpired(Boolean accountNonExpired) {
 		this.accountNonExpired = accountNonExpired;
 	}
 
-	public boolean isAccountNonLocked() {
+	public Boolean getAccountNonLocked() {
 		return accountNonLocked;
 	}
 
-	public void setAccountNonLocked(boolean accountNonLocked) {
+	public void setAccountNonLocked(Boolean accountNonLocked) {
 		this.accountNonLocked = accountNonLocked;
 	}
 
-	public boolean isCredentialsNonExpired() {
+	public Boolean getCredentialsNonExpired() {
 		return credentialsNonExpired;
 	}
 
-	public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+	public void setCredentialsNonExpired(Boolean credentialsNonExpired) {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 }

@@ -86,10 +86,18 @@
 			<if test="authority != null">
 				AND authority.authority = #{authority}
 			</if>
-			AND user.account_non_expired = #{accountNonExpired}
-			AND user.account_non_locked = #{accountNonLocked}
-			AND user.credentials_non_expired = #{credentialsNonExpired}
-			AND user.enabled = #{enabled}
+			<if test="accountNonExpired != null">
+				AND user.account_non_expired = #{accountNonExpired}
+			</if>
+			<if test="accountNonLocked != null">
+				AND user.account_non_locked = #{accountNonLocked}
+			</if>
+			<if test="credentialsNonExpired != null">
+				AND user.credentials_non_expired = #{credentialsNonExpired}
+			</if>
+			<if test="enabled != null">
+				AND user.enabled = #{enabled}
+			</if>
 		GROUP BY
 			user.username
 			, user.email
@@ -128,6 +136,15 @@
 		)
 	</insert>
 
+	<update id="updateUser" parameterMap="User">
+		UPDATE tus_user
+		SET
+			email = #{email}
+			, mod_date = CURRENT_DATE()
+		WHERE
+			username = #{username}
+	</update>
+
 	<update id="updateUser" parameterType="User">
 		UPDATE tus_user
 		SET
@@ -162,7 +179,13 @@
 		)
 	</insert>
 
-	<select id="selectUserIpByUserName" resultType="Ip">
+	<delete id="deleteUserAuthorityByUsername" parameterType="String">
+		DELETE FROM tus_user_authority
+		WHERE
+			username = #{username}
+	</delete>
+
+	<select id="selectUserIpByUsername" resultType="Ip">
 		SELECT
 			username
 			, ip
@@ -184,5 +207,11 @@
 			, #{type}
 		)
 	</insert>
+
+	<delete id="deleteUserIpByUsername" parameterType="String">
+		DELETE FROM tus_user_ip
+		WHERE
+			username = #{username}
+	</delete>
 
 </mapper>

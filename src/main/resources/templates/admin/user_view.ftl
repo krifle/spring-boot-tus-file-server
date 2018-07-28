@@ -2,9 +2,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 	<title>Admin - User List</title>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 </head>
 <body>
 	<h1>User List</h1>
@@ -19,7 +16,34 @@
 			<th>Account Locked</th>
 			<th>Credential Expired</th>
 			<th>Enabled</th>
+			<th>IPs</th>
+			<th>Authorities</th>
 		</tr>
+		<#list userList as user>
+		<tr>
+			<td><a href="/admin/user/form/${user.username}">${user.username}</a></td>
+			<td>${user.email}</td>
+			<td>${user.regDate?string["yyyy-MM-dd"]}</td>
+			<td>${user.modDate?string["yyyy-MM-dd"]}</td>
+			<td>${user.lastLogin?string["yyyy-MM-dd"]}</td>
+			<td>${user.accountNonExpired?then("Y", "N")}</td>
+			<td>${user.accountNonLocked?then("Y", "N")}</td>
+			<td>${user.credentialsNonExpired?then("Y", "N")}</td>
+			<td>${user.enabled?then("Y", "N")}</td>
+			<td><#list user.ips as ip>${ip.ip}<#sep>, </#sep></#list></td>
+			<td><#list user.authorities as authority>${authority.authority}<#sep>, </#sep></#list></td>
+		</tr>
+		</#list>
 	</table>
+
+	<h2>Search</h2>
+	<form action="/admin/users" method="get">
+		<table>
+			<tr>
+				<th>User Name</th>
+				<td><input type="text" name="username" /></td>
+			</tr>
+		</table>
+	</form>
 </body>
 </html>

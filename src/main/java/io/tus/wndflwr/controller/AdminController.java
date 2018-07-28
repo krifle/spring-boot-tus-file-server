@@ -1,14 +1,15 @@
 package io.tus.wndflwr.controller;
 
+import io.tus.wndflwr.config.Props;
+import io.tus.wndflwr.controller.request.model.AuthorityList;
 import io.tus.wndflwr.controller.request.model.UserSearch;
 import io.tus.wndflwr.controller.response.model.CommonResult;
 import io.tus.wndflwr.repository.model.User;
 import io.tus.wndflwr.service.UserService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -19,10 +20,30 @@ public class AdminController {
 
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private Props props;
 
+	// TODO add security check for admin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public ModelAndView getUserView() {
-		return new ModelAndView("admin/user_view");
+	public ModelAndView getUserView(@ModelAttribute UserSearch userSearch) {
+		return new ModelAndView("admin/user_view")
+				.addObject("userList", userService.getUserList(userSearch));
+	}
+
+	@RequestMapping(value = "/user/form/{username}", method = RequestMethod.GET)
+	public ModelAndView getUserFormViewByUserName(@PathVariable(required = false) String username) {
+		return new ModelAndView("admin/user_form")
+				.addObject("edit", StringUtils.isNotEmpty(username))
+				.addObject("user", userService.getUser(username, true))
+				.addObject("authorities", props.getAuthorities());
+	}
+
+	@RequestMapping(value = "/user/form", method = RequestMethod.POST)
+	public ModelAndView upsertUser(@ModelAttribute User user, String ipList, AuthorityList authorityList) {
+		user.setIps(ipList);
+		user.setAuthorities(authorityList);
+		userService.upsertUser(user);
+		return new ModelAndView("redirect:/admin/user/form/" + user.getUsername());
 	}
 
 	@RequestMapping(value = "/userList", method = RequestMethod.GET)

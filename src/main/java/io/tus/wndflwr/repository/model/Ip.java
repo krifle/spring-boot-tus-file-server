@@ -39,4 +39,12 @@ public class Ip {
 		ip.setType(IpType.IPV4);
 		return ip;
 	}
+
+	public static Ip ofIpv4(String username, String ip) {
+		Ip ipObject = new Ip();
+		ipObject.ip = ip;
+		ipObject.username = username;
+		ipObject.setType(IpType.IPV4);
+		return ipObject;
+	}
 }

@@ -1,10 +1,16 @@
 package io.tus.wndflwr.repository.model;
 
+import com.google.common.base.Splitter;
+import io.tus.wndflwr.controller.request.model.AuthorityList;
+import io.tus.wndflwr.exception.UserManageException;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class User implements UserDetails {
 
@@ -59,6 +65,17 @@ public class User implements UserDetails {
 		this.ips = ips;
 	}
 
+	public void setIps(String ipList) {
+		ips = Splitter
+				.onPattern("\r?\n")
+				.trimResults()
+				.omitEmptyStrings()
+				.splitToList(ipList)
+				.stream()
+				.map(ip -> Ip.ofIpv4(username, ip))
+				.collect(Collectors.toList());
+	}
+
 	public Date getModDate() {
 		return modDate;
 	}
@@ -90,6 +107,14 @@ public class User implements UserDetails {
 
 	public void setAuthorities(List<Authority> authorities) {
 		this.authorities = authorities;
+	}
+
+	public void setAuthorities(AuthorityList authorityList) {
+		authorities = authorityList.asAuthorityList(username);
+	}
+
+	public List<String> getAuthorityNames() {
+		return authorities.stream().map(Authority::getAuthority).collect(Collectors.toList());
 	}
 
 	@Override
@@ -126,6 +151,25 @@ public class User implements UserDetails {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public boolean hasAdminAuthority() {
+		return authorities.stream().anyMatch(Authority::isAdmin);
+	}
+
+	public void validateForUpsert() {
+		if (StringUtils.isEmpty(username)) {
+			throw new UserManageException("Invalid input: Empty username");
+		}
+		if (StringUtils.isEmpty(email)) {
+			throw new UserManageException("Invalid input: Empty email");
+		}
+		if (CollectionUtils.isEmpty(ips)) {
+			throw new UserManageException("Invalid input: user's ip should not be empty.");
+		}
+		if (CollectionUtils.isEmpty(authorities)) {
+			throw new UserManageException("Invalid input: user's authorities should not be empty");
+		}
 	}
 
 	public static User ofDefault(PasswordEncoder passwordEncoder) {
