@@ -2,6 +2,8 @@ package io.tus.wndflwr.repository.model;
 
 public class Ip {
 
+	private static final String DEFAULT_IP = "127.0.0.1";
+
 	private String username;
 	private String ip;
 	private IpType type;
@@ -28,5 +30,13 @@ public class Ip {
 
 	public void setType(IpType type) {
 		this.type = type;
+	}
+
+	public static Ip ofDefault() {
+		Ip ip = new Ip();
+		ip.setUsername(User.DEFAULT_USERNAME);
+		ip.setIp(DEFAULT_IP);
+		ip.setType(IpType.IPV4);
+		return ip;
 	}
 }

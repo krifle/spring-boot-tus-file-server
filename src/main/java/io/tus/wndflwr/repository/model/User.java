@@ -1,11 +1,16 @@
 package io.tus.wndflwr.repository.model;
 
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
 
 public class User implements UserDetails {
+
+	public static final String DEFAULT_USERNAME = "admin";
+	private static final String DEFAULT_UESR_PASSWORD = "admin";
+	private static final String DEFAULT_USER_EMAIL = "admin@admin.com";
 
 	private String username;
 	private String password;
@@ -121,5 +126,13 @@ public class User implements UserDetails {
 
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
+	}
+
+	public static User ofDefault(PasswordEncoder passwordEncoder) {
+		User user = new User();
+		user.username = DEFAULT_USERNAME;
+		user.password = passwordEncoder.encode(DEFAULT_UESR_PASSWORD);
+		user.email = DEFAULT_USER_EMAIL;
+		return user;
 	}
 }
