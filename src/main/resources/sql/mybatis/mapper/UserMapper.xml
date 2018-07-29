@@ -145,19 +145,11 @@
 			username = #{username}
 	</update>
 
-	<update id="updateUser" parameterType="User">
-		UPDATE tus_user
-		SET
-			<if test="password != null">
-				password = #{password}
-			</if>
-			<if test="email != null">
-				, email = #{email}
-			</if>
-			,
+	<delete id="deleteUserByUserName" parameterType="String">
+		DELETE FROM tus_user
 		WHERE
 			username = #{username}
-	</update>
+	</delete>
 
 	<select id="selectUserAuthorityByUserName" resultType="Authority">
 		SELECT

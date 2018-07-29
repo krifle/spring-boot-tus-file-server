@@ -2,6 +2,7 @@ package io.tus.wndflwr.service;
 
 import io.tus.wndflwr.controller.request.model.UserSearch;
 import io.tus.wndflwr.controller.response.model.CommonResult;
+import io.tus.wndflwr.exception.UserManageException;
 import io.tus.wndflwr.repository.UserMapper;
 import io.tus.wndflwr.repository.model.User;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +53,17 @@ public class UserService {
 			user.getAuthorities().forEach(authority -> userMapper.insertUserAuthority(authority));
 			user.getIps().forEach(ip -> userMapper.insertUserIp(ip));
 		}
+	}
+
+	public void deleteUser(String username) {
+		User user = userMapper.selectUserByUsername(username);
+		if (user == null) {
+			throw new UserManageException("User info is not found.");
+		}
+		if (user.isDefaultAdmin()) {
+			throw new UserManageException("Cannot delete the default admin account.");
+		}
+		userMapper.deleteUserByUserName(username);
 	}
 
 	public CommonResult postUser(User user) {

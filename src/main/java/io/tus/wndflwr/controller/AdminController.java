@@ -26,7 +26,7 @@ public class AdminController {
 	// TODO add security check for admin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
 	public ModelAndView getUserView(@ModelAttribute UserSearch userSearch) {
-		return new ModelAndView("admin/user_view")
+		return new ModelAndView("admin/user_list")
 				.addObject("userList", userService.getUserList(userSearch));
 	}
 
@@ -44,6 +44,12 @@ public class AdminController {
 		user.setAuthorities(authorityList);
 		userService.upsertUser(user);
 		return new ModelAndView("redirect:/admin/user/form/" + user.getUsername());
+	}
+
+	@RequestMapping(value = "/user/delete/{username}", method = RequestMethod.GET) // TODO DELETE method support
+	public ModelAndView deleteUser(@PathVariable String username) {
+		userService.deleteUser(username);
+		return new ModelAndView("redirect:/admin/users");
 	}
 
 	@RequestMapping(value = "/userList", method = RequestMethod.GET)

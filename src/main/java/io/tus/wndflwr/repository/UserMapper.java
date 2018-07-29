@@ -21,6 +21,8 @@ public interface UserMapper {
 
 	void updateUser(User user);
 
+	void deleteUserByUserName(String username);
+
 	void createTableUserAuthority();
 
 	List<Authority> selectUserAuthorityByUserName(String username);

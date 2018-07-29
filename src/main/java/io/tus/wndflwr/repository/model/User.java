@@ -157,6 +157,10 @@ public class User implements UserDetails {
 		return authorities.stream().anyMatch(Authority::isAdmin);
 	}
 
+	public boolean isDefaultAdmin() {
+		return DEFAULT_USERNAME.equals(username);
+	}
+
 	public void validateForUpsert() {
 		if (StringUtils.isEmpty(username)) {
 			throw new UserManageException("Invalid input: Empty username");

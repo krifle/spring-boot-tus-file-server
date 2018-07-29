@@ -18,6 +18,7 @@
 			<th>Enabled</th>
 			<th>IPs</th>
 			<th>Authorities</th>
+			<th></th>
 		</tr>
 		<#list userList as user>
 		<tr>
@@ -32,6 +33,7 @@
 			<td>${user.enabled?then("Y", "N")}</td>
 			<td><#list user.ips as ip>${ip.ip}<#sep>, </#sep></#list></td>
 			<td><#list user.authorities as authority>${authority.authority}<#sep>, </#sep></#list></td>
+			<th><a href="/admin/user/delete/${user.username}">Delete</a></td>
 		</tr>
 		</#list>
 	</table>
@@ -45,5 +47,9 @@
 			</tr>
 		</table>
 	</form>
+
+	<div>
+		<a href="/admin/user/form/">Add user</a>
+	</div>
 </body>
 </html>
