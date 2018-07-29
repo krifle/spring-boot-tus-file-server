@@ -1,8 +1,14 @@
 package io.tus.wndflwr.repository.model;
 
+import io.tus.wndflwr.exception.UserManageException;
+
+import java.util.regex.Pattern;
+
 public class Ip {
 
 	private static final String DEFAULT_IP = "127.0.0.1";
+	private static final Pattern IPV4_PATTERN = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$");
+	private static final Pattern IPV6_PATTERN = Pattern.compile("^((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)::((?:[0-9A-Fa-f]{1,4}(?::[0-9A-Fa-f]{1,4})*)?)$");
 
 	private String username;
 	private String ip;
@@ -30,6 +36,20 @@ public class Ip {
 
 	public void setType(IpType type) {
 		this.type = type;
+	}
+
+	public void validate() {
+		if (type == IpType.IPV4) {
+			if (!IPV4_PATTERN.matcher(ip).matches()) {
+				throw new UserManageException("Invalid IPV4 pattern: " + ip);
+			}
+		} else if (type == IpType.IPV6) {
+			if (!IPV6_PATTERN.matcher(ip).matches()) {
+				throw new UserManageException("Invalid IPV6 pattern: " + ip);
+			}
+		} else {
+			throw new UserManageException("Invalid Ip Type"); // TODO create another exception object
+		}
 	}
 
 	public static Ip ofDefault() {

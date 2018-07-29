@@ -74,16 +74,16 @@
 		WHERE
 			user.username = ip.username
 			AND user.username = authority.username
-			<if test="username != null">
+			<if test="username != null and username != ''">
 				AND user.username = #{username}
 			</if>
-			<if test="email != null">
+			<if test="email != null and email != ''">
 				AND user.email = #{email}
 			</if>
-			<if test="ip != null">
+			<if test="ip != null and ip != ''">
 				AND ip.ip = #{ip}
 			</if>
-			<if test="authority != null">
+			<if test="authority != null and authority != ''">
 				AND authority.authority = #{authority}
 			</if>
 			<if test="accountNonExpired != null">
@@ -136,7 +136,7 @@
 		)
 	</insert>
 
-	<update id="updateUser" parameterMap="User">
+	<update id="updateUser" parameterType="User">
 		UPDATE tus_user
 		SET
 			email = #{email}

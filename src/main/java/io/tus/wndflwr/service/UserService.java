@@ -64,6 +64,8 @@ public class UserService {
 			throw new UserManageException("Cannot delete the default admin account.");
 		}
 		userMapper.deleteUserByUserName(username);
+		userMapper.deleteUserAuthorityByUsername(username);
+		userMapper.deleteUserIpByUsername(username);
 	}
 
 	public CommonResult postUser(User user) {

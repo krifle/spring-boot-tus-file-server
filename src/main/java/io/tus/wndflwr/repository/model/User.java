@@ -171,6 +171,7 @@ public class User implements UserDetails {
 		if (CollectionUtils.isEmpty(ips)) {
 			throw new UserManageException("Invalid input: user's ip should not be empty.");
 		}
+		ips.forEach(Ip::validate);
 		if (CollectionUtils.isEmpty(authorities)) {
 			throw new UserManageException("Invalid input: user's authorities should not be empty");
 		}

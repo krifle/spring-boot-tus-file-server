@@ -25,8 +25,8 @@
 			<tr>
 				<th>IPs</th>
 				<td>
-					<textarea name="ipList" cols="30" rows="5"><#list user.ips as ip>${ip.ip}<#sep>
-</#sep></#list></textarea>
+					<textarea name="ipList" cols="30" rows="5"><#if edit><#list user.ips as ip>${ip.ip}<#sep>
+</#sep></#list></#if></textarea>
 				</td>
 			</tr>
 			<tr>
@@ -34,7 +34,7 @@
 				<td>
 					<select name="authorityList" multiple>
 						<#list authorities as authority>
-						<option value="${authority}" ${user.authorityNames?seq_contains(authority)?string("selected", "")}>${authority}</option>
+						<option value="${authority}" <#if edit>${user.authorityNames?seq_contains(authority)?string("selected", "")}</#if>>${authority}</option>
 						</#list>
 					</select>
 				</td>
@@ -71,6 +71,7 @@
 			</#if>
 		</table>
 		<input type="submit"/>
+		<a href="/admin/users">목록으로</a>
 	</form>
 </body>
 </html>

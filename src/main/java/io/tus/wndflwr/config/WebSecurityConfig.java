@@ -38,6 +38,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.logout()
 				.permitAll()
+				.logoutUrl("/logout")
 				.and();
 
 		http.csrf().disable(); // TODO to be removed

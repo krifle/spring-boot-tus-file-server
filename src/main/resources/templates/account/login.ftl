@@ -25,6 +25,7 @@
 				</div>
 			</div>
 		</div>
+		<a href="">Join</a>
 	</div>
 </body>
 </html>

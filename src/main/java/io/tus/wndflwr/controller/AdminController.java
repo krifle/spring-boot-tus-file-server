@@ -3,16 +3,12 @@ package io.tus.wndflwr.controller;
 import io.tus.wndflwr.config.Props;
 import io.tus.wndflwr.controller.request.model.AuthorityList;
 import io.tus.wndflwr.controller.request.model.UserSearch;
-import io.tus.wndflwr.controller.response.model.CommonResult;
 import io.tus.wndflwr.repository.model.User;
 import io.tus.wndflwr.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -25,15 +21,22 @@ public class AdminController {
 
 	// TODO add security check for admin
 	@RequestMapping(value = "/users", method = RequestMethod.GET)
-	public ModelAndView getUserView(@ModelAttribute UserSearch userSearch) {
+	public ModelAndView getUsers(@ModelAttribute UserSearch userSearch) {
 		return new ModelAndView("admin/user_list")
 				.addObject("userList", userService.getUserList(userSearch));
 	}
 
-	@RequestMapping(value = "/user/form/{username}", method = RequestMethod.GET)
-	public ModelAndView getUserFormViewByUserName(@PathVariable(required = false) String username) {
+	@RequestMapping(value = "/user/form/new", method = RequestMethod.GET)
+	public ModelAndView getNewUser() {
 		return new ModelAndView("admin/user_form")
-				.addObject("edit", StringUtils.isNotEmpty(username))
+				.addObject("edit", false)
+				.addObject("authorities", props.getAuthorities());
+	}
+
+	@RequestMapping(value = "/user/form/{username}", method = RequestMethod.GET)
+	public ModelAndView getUserFormViewByUserName(@PathVariable String username) {
+		return new ModelAndView("admin/user_form")
+				.addObject("edit", true)
 				.addObject("user", userService.getUser(username, true))
 				.addObject("authorities", props.getAuthorities());
 	}
@@ -52,21 +55,10 @@ public class AdminController {
 		return new ModelAndView("redirect:/admin/users");
 	}
 
-	@RequestMapping(value = "/userList", method = RequestMethod.GET)
-	@ResponseBody
-	public List<User> getUserList(UserSearch userSearch) {
-		return userService.getUserList(userSearch);
-	}
-
-	@RequestMapping(value = "/user", method = RequestMethod.GET)
-	@ResponseBody
-	public User getUser(String username) {
-		return userService.getUser(username, true);
-	}
-
-	@RequestMapping(value = "/user", method = RequestMethod.POST)
-	@ResponseBody
-	public CommonResult postUser(User user) {
-		return userService.postUser(user);
+	@ExceptionHandler(Exception.class)
+	public ModelAndView exceptionHandler(Exception e) {
+		return new ModelAndView("admin/exception")
+				.addObject("exceptionMessage", e.getMessage())
+				.addObject("fallbackUrl", "/admin/users");
 	}
 }
