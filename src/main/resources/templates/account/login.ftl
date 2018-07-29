@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Tus File Server Login</title>
+	<title>Tus File: Server Login</title>
 </head>
 <body>
-	<#if param?? && param.error>
-	<div>Invalid user and password.</div>
-	</#if>
-
-	<#if param?? && param.logout>
-	<div>You have been logged out.</div>
-	</#if>
-
 	<div class="container">
 		<div class="row">
 			<div>

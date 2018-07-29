@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<title>Tus File Manager</title>
+	<title>Tus File: Tus File Manager</title>
 </head>
 <body>
 	<div class="container">
