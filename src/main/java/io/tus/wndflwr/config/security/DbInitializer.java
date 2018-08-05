@@ -1,6 +1,7 @@
 package io.tus.wndflwr.config.security;
 
 import io.tus.wndflwr.repository.UserMapper;
+import io.tus.wndflwr.repository.UserRequestMapper;
 import io.tus.wndflwr.repository.model.Authority;
 import io.tus.wndflwr.repository.model.Ip;
 import io.tus.wndflwr.repository.model.User;
@@ -17,6 +18,8 @@ public class DbInitializer {
 	@Autowired
 	private UserMapper userMapper;
 	@Autowired
+	private UserRequestMapper userRequestMapper;
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@PostConstruct
@@ -24,6 +27,9 @@ public class DbInitializer {
 		userMapper.createTableUser();
 		userMapper.createTableUserAuthority();
 		userMapper.createTableUserIp();
+
+		userRequestMapper.createTableUserRequest();
+		userRequestMapper.createTableUserIpRequest();
 
 		createDefaultAdmin();
 	}

@@ -5,23 +5,23 @@
 	<insert id="createTableUser">
 		CREATE TABLE IF NOT EXISTS tus_user (
 			username VARCHAR(255) PRIMARY KEY
-			, password VARCHAR(255)
-			, email VARCHAR(255)
-			, reg_date TIMESTAMP
-			, mod_date TIMESTAMP
+			, password VARCHAR(255) NOT NULL
+			, email VARCHAR(255) NOT NULL
+			, reg_date TIMESTAMP NOT NULL
+			, mod_date TIMESTAMP NOT NULL
 			, last_login TIMESTAMP
-			, account_non_expired BOOLEAN
-			, account_non_locked BOOLEAN
-			, credentials_non_expired BOOLEAN
-			, enabled BOOLEAN
+			, account_non_expired BOOLEAN NOT NULL
+			, account_non_locked BOOLEAN NOT NULL
+			, credentials_non_expired BOOLEAN NOT NULL
+			, enabled BOOLEAN NOT NULL
 		);
 		CREATE INDEX IF NOT EXISTS idx_user_email ON tus_user (email);
 	</insert>
 
 	<insert id="createTableUserAuthority">
 		CREATE TABLE IF NOT EXISTS tus_user_authority (
-			username VARCHAR(255)
-			, authority VARCHAR(255)
+			username VARCHAR(255) NOT NULL
+			, authority VARCHAR(255) NOT NULL
 		);
 		CREATE INDEX IF NOT EXISTS idx_user_authority_username ON tus_user_authority (username);
 		CREATE INDEX IF NOT EXISTS idx_user_authority_authority ON tus_user_authority (authority);
@@ -29,9 +29,9 @@
 
 	<insert id="createTableUserIp">
 		CREATE TABLE IF NOT EXISTS tus_user_ip (
-			username VARCHAR(255)
-			, type VARCHAR(4)
-			, ip VARCHAR(100)
+			username VARCHAR(255) NOT NULL
+			, type VARCHAR(4) NOT NULL
+			, ip VARCHAR(100) NOT NULL
 		);
 		CREATE INDEX IF NOT EXISTS idx_user_ip_username ON tus_user_ip (username);
 		CREATE INDEX IF NOT EXISTS idx_user_ip_type ON tus_user_ip (type);
@@ -140,7 +140,7 @@
 		UPDATE tus_user
 		SET
 			email = #{email}
-			, mod_date = CURRENT_DATE()
+			, mod_date = SYSDATE
 		WHERE
 			username = #{username}
 	</update>

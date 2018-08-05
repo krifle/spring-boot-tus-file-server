@@ -17,7 +17,7 @@
 				</div>
 			</div>
 		</div>
-		<a href="">Join</a>
+		<a href="/register">Join</a>
 	</div>
 </body>
 </html>

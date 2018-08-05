@@ -18,6 +18,12 @@
 					</#if>
 				</td>
 			</tr>
+			<#if !edit>
+			<tr>
+				<th>Password</th>
+				<td><input type="password" name="password"/></td>
+			</tr>
+			</#if>
 			<tr>
 				<th>Email</th>
 				<td><input type="text" name="email" value="${(user.email)!}" /></td>
