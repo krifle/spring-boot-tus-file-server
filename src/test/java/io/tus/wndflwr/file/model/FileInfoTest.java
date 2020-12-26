@@ -1,8 +1,9 @@
 package io.tus.wndflwr.file.model;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.junit.Test;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.UUID;
 
@@ -21,9 +22,9 @@ public class FileInfoTest {
 	@Test
 	public void decodeMetadata_shouldDecodeTusProtocolMetadataSuccessfully() {
 		// given
-		String value1 = Base64.encode("Value1".getBytes());
-		String value2 = Base64.encode("Value2".getBytes());
-		String value3 = Base64.encode("Value3".getBytes());
+		String value1 = new String(Base64.encodeBase64("Value1".getBytes(StandardCharsets.UTF_8)));
+		String value2 = new String(Base64.encodeBase64("Value2".getBytes(StandardCharsets.UTF_8)));
+		String value3 = new String(Base64.encodeBase64("Value3".getBytes(StandardCharsets.UTF_8)));
 		String metadata = String.format("Key1 %s, Key2 %s, Key3 %s", value1, value2, value3);
 
 		// when

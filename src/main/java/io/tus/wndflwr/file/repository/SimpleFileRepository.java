@@ -7,7 +7,6 @@ import io.tus.wndflwr.exception.NotFoundException;
 import io.tus.wndflwr.exception.TusException;
 import io.tus.wndflwr.file.model.FileInfo;
 import io.tus.wndflwr.model.request.PatchRequest;
-import jdk.nashorn.internal.runtime.regexp.joni.exception.InternalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,12 +111,12 @@ public class SimpleFileRepository implements FileRepository {
 		}
 	}
 
-	private void writeFileInfoToFile(FileInfo fileInfo, File infoFile) {
+	private void writeFileInfoToFile(FileInfo fileInfo, File infoFile) throws TusException {
 		try {
 			new ObjectMapper().writeValue(infoFile, fileInfo);
 		} catch (IOException e) {
 			LOGGER.error("IOException: ", e);
-			throw new InternalException("Cannot write file[" + infoFile.getName() + "]");
+			throw new InternalServerException("Cannot write file[" + infoFile.getName() + "]");
 		}
 	}
 
